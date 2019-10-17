@@ -5,11 +5,11 @@ public class TempSummaryStatistics {
     private double devTemp;
     private double minTemp;
     private double maxTemp;
-    public TempSummaryStatistics(double avgTemp, double devTemp, double minTemp, double maxTemp) {
-        this.avgTemp = avgTemp;
-        this.devTemp = devTemp;
-        this.minTemp = minTemp;
-        this.maxTemp = maxTemp;
+    public TempSummaryStatistics(double avg, double dev, double min, double max) {
+        this.avgTemp = avg;
+        this.devTemp = dev;
+        this.minTemp = min;
+        this.maxTemp = max;
     }
     public double getAvgTemp() {
         return avgTemp;
