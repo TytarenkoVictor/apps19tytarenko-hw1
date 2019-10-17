@@ -1,16 +1,17 @@
 package ua.edu.ucu.tempseries;
 
-import java.util.Arrays;
 import java.util.InputMismatchException;
 
 public class TemperatureSeriesAnalysis {
-    public int size;
     private static final int minTemp = -273;
-    private double[] tempArr;
+    private double[] temp;
     private int capacity;
+    private int size;
+
     public TemperatureSeriesAnalysis() {
-        tempArr = new double[1];
+        temp = new double[1];
         capacity = 1;
+        size = 0;
     }
 
     public TemperatureSeriesAnalysis(double[] temperatureSeries) {
@@ -22,38 +23,39 @@ public class TemperatureSeriesAnalysis {
                 throw new InputMismatchException();
             }
         }
-        tempArr = Arrays.copyOf(temperatureSeries, temperatureSeries.length);
-        capacity = tempArr.length * 2;
+        temp = temperatureSeries;
+        size = temperatureSeries.length;
+        capacity = size;
     }
 
     public double average() {
-        if (tempArr.length == 0) {
+        if (size == 0) {
             throw new IllegalArgumentException();
         }
         double aver = 0;
-        for (double i : tempArr) {
+        for (double i : temp) {
             aver += i;
         }
-        return aver / tempArr.length;
+        return aver / size;
     }
 
     public double deviation() {
-        if (tempArr.length == 0) {
+        if (size == 0) {
             throw new IllegalArgumentException();
         }
         double sum = 0;
-        for (double elem : tempArr){
-            sum += (double)Math.pow((elem - average()), 2);
+        for (double elem : temp){
+            sum += (elem - average()) * (elem - average());
         }
-        return Math.sqrt(sum / tempArr.length);
+        return Math.sqrt(sum / size);
     }
 
     public double min() {
-        if (tempArr.length == 0) {
+        if (size == 0) {
             throw new IllegalArgumentException();
         }
-        double min = tempArr[0];
-        for (double i: tempArr){
+        double min = temp[0];
+        for (double i: temp){
             if (i < min){
                 min = i;
             }
@@ -62,11 +64,11 @@ public class TemperatureSeriesAnalysis {
     }
 
     public double max() {
-        if (tempArr.length == 0) {
+        if (size == 0) {
             throw new IllegalArgumentException();
         }
-        double max = tempArr[0];
-        for (double i: tempArr){
+        double max = temp[0];
+        for (double i: temp){
             if (i > max){
                 max = i;
             }
@@ -75,40 +77,38 @@ public class TemperatureSeriesAnalysis {
     }
 
     public double findTempClosestToZero() {
-        if (tempArr.length == 0) {
+        if (size == 0) {
             throw new IllegalArgumentException();
         }
-        double delta = tempArr[0];
-        for (double elem : tempArr){
-            if (Math.abs(elem) < Math.abs(delta)){
-                delta = elem;
-            }else if (Math.abs(elem) == Math.abs(delta) && elem > 0){
-                delta = elem;
-            }
-        }
-        return delta;
+        return findTempClosestToValue(0.0);
     }
 
     public double findTempClosestToValue(double tempValue) {
-        if (tempArr.length == 0) {
+        if (size == 0) {
             throw new IllegalArgumentException();
         }
-        double delta = tempArr[0] - tempValue;
-        for (double elem : tempArr){
+        double closest = temp[0];
+        double delta = temp[0] - tempValue;
+        for (double elem : temp){
             if (Math.abs(elem - tempValue) < Math.abs(delta)){
                 delta = elem - tempValue;
+                closest = elem;
             }else if (Math.abs(elem - tempValue) == Math.abs(delta) && elem > 0){
                 delta = elem - tempValue;
+                closest = elem;
             }
         }
-        return delta - tempValue;
+        return closest;
     }
 
     public double[] findTempsLessThen(double tempValue) {
-        double[] less = new double[tempArr.length];
+        if (size == 0) {
+            throw new IllegalArgumentException();
+        }
+        double[] less = new double[size];
         int count = 0;
-        for (double elem : tempArr){
-            if (elem < tempValue){
+        for (double elem : temp){
+            if (elem > tempValue){
                 less[count] = elem;
                 count += 1;
             }
@@ -117,9 +117,12 @@ public class TemperatureSeriesAnalysis {
     }
 
     public double[] findTempsGreaterThen(double tempValue) {
-        double[] greater = new double[tempArr.length];
+        if (size == 0) {
+            throw new IllegalArgumentException();
+        }
+        double[] greater = new double[size];
         int count = 0;
-        for (double elem : tempArr){
+        for (double elem : temp){
             if (elem > tempValue){
                 greater[count] = elem;
                 count += 1;
@@ -128,26 +131,31 @@ public class TemperatureSeriesAnalysis {
         return greater;
     }
 
-    public TempSummaryStatistics summaryStatistics(double average, double deviation, double min, double max) {
-
+    public TempSummaryStatistics summaryStatistics() {
+        if (size == 0) {
+            throw new IllegalArgumentException();
+        }
         return new TempSummaryStatistics(average(), deviation(), min(), max());
     }
 
     public int addTemps(double... temps) {
+        if (size == 0) {
+            throw new IllegalArgumentException();
+        }
         for (double elem : temps) {
             if (elem < minTemp) {
                 throw new InputMismatchException();
             }
-            if (capacity == tempArr.length){
+            if (capacity == size){
                 capacity = capacity * 2;
-                double[] tempArr2 = new double[capacity];
-                System.arraycopy(tempArr2, 0, tempArr, tempArr.length, tempArr2.length);
-                tempArr[tempArr.length] = elem;
+                double[] temp2 = new double[capacity];
+                System.arraycopy(temp, 0, temp2, 0, size);
+                temp = temp2;
+                temp[size] = elem;
             }else{
-                tempArr[tempArr.length] = elem;
+                temp[size] = elem;
             }
         }
-        return tempArr.length;
+        return size;
     }
 }
-
