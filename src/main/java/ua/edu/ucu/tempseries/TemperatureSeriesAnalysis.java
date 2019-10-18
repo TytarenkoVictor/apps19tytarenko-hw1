@@ -1,12 +1,17 @@
 package ua.edu.ucu.tempseries;
 
 import java.util.InputMismatchException;
+import java.util.Arrays;
 
 public class TemperatureSeriesAnalysis {
     private static final int minTemp = -273;
     private double[] temp;
     private int capacity;
     private int size;
+
+    public int getSize() {
+        return size;
+    }
 
     public TemperatureSeriesAnalysis() {
         temp = new double[1];
@@ -105,14 +110,21 @@ public class TemperatureSeriesAnalysis {
         if (size == 0) {
             throw new IllegalArgumentException();
         }
-        double[] less = new double[size];
         int count = 0;
-        for (double elem : temp){
-            if (elem > tempValue){
-                less[count] = elem;
+        for (double elem : temp) {
+            if (elem < tempValue) {
                 count += 1;
             }
         }
+        int new_size = 0;
+        double[] less = new double[count];
+        for (double elem : temp) {
+            if (elem < tempValue) {
+                less[new_size] = elem;
+                new_size++;
+            }
+        }
+        Arrays.sort(less);
         return less;
     }
 
@@ -120,14 +132,21 @@ public class TemperatureSeriesAnalysis {
         if (size == 0) {
             throw new IllegalArgumentException();
         }
-        double[] greater = new double[size];
         int count = 0;
-        for (double elem : temp){
-            if (elem > tempValue){
-                greater[count] = elem;
+        for (double elem : temp) {
+            if (elem > tempValue) {
                 count += 1;
             }
         }
+        int new_size = 0;
+        double[] greater = new double[count];
+        for (double elem : temp) {
+            if (elem > tempValue) {
+                greater[new_size] = elem;
+                new_size++;
+            }
+        }
+        Arrays.sort(greater);
         return greater;
     }
 
@@ -141,19 +160,18 @@ public class TemperatureSeriesAnalysis {
     public int addTemps(double... temps) {
         if (size == 0) {
             throw new IllegalArgumentException();
+        }else if (capacity == size) {
+            double[] temp2 = new double[capacity * 2];
+            capacity = capacity * 2;
+            System.arraycopy(temp, 0, temp2, 0, size);
+            temp = temp2;
         }
         for (double elem : temps) {
             if (elem < minTemp) {
                 throw new InputMismatchException();
-            }
-            if (capacity == size){
-                capacity = capacity * 2;
-                double[] temp2 = new double[capacity];
-                System.arraycopy(temp, 0, temp2, 0, size);
-                temp = temp2;
-                temp[size] = elem;
             }else{
                 temp[size] = elem;
+                size++;
             }
         }
         return size;
