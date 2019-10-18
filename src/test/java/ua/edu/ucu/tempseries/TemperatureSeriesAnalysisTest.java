@@ -3,9 +3,9 @@ package ua.edu.ucu.tempseries;
 import static org.junit.Assert.*;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
-import java.util.InputMismatchException;
 
 public class TemperatureSeriesAnalysisTest {
     private TemperatureSeriesAnalysis elems;
@@ -32,7 +32,7 @@ public class TemperatureSeriesAnalysisTest {
         double min = elems.min();
         assertEquals(1.0, min, 0.0001);
     }
-
+    
     @Test
     public void TestMax() {
         double max = elems.max();
@@ -68,11 +68,10 @@ public class TemperatureSeriesAnalysisTest {
     }
 
 
-
     @Test()
     public void TestAddTemps() {
-        TemperatureSeriesAnalysis testAdd = new TemperatureSeriesAnalysis();
+        TemperatureSeriesAnalysis testAdd = new TemperatureSeriesAnalysis(new double[] {1, 2, 3});
         testAdd.addTemps(444444, 0.0004, 343);
-        assertEquals(11, testAdd.getSize(), 0.001);
+        assertEquals(6, testAdd.getSize(), 0.001);
     }
 }
