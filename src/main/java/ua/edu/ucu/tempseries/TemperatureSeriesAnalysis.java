@@ -9,9 +9,6 @@ public class TemperatureSeriesAnalysis {
     private int capacity;
     private int size;
 
-    public int getSize() {
-        return size;
-    }
 
     public TemperatureSeriesAnalysis() {
         temp = new double[1];
@@ -33,6 +30,10 @@ public class TemperatureSeriesAnalysis {
         capacity = size;
     }
 
+    public int getSize() {
+        return size;
+    }
+
     public double average() {
         if (size == 0) {
             throw new IllegalArgumentException();
@@ -49,7 +50,7 @@ public class TemperatureSeriesAnalysis {
             throw new IllegalArgumentException();
         }
         double sum = 0;
-        for (double elem : temp){
+        for (double elem : temp) {
             sum += (elem - average()) * (elem - average());
         }
         return Math.sqrt(sum / size);
@@ -57,11 +58,11 @@ public class TemperatureSeriesAnalysis {
 
     public double min() {
         if (size == 0) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("No elems");
         }
         double min = temp[0];
-        for (double i: temp){
-            if (i < min){
+        for (double i: temp) {
+            if (i < min) {
                 min = i;
             }
         }
@@ -73,8 +74,8 @@ public class TemperatureSeriesAnalysis {
             throw new IllegalArgumentException();
         }
         double max = temp[0];
-        for (double i: temp){
-            if (i > max){
+        for (double i: temp) {
+            if (i > max) {
                 max = i;
             }
         }
@@ -94,11 +95,11 @@ public class TemperatureSeriesAnalysis {
         }
         double closest = temp[0];
         double delta = temp[0] - tempValue;
-        for (double elem : temp){
-            if (Math.abs(elem - tempValue) < Math.abs(delta)){
+        for (double elem : temp) {
+            if (Math.abs(elem - tempValue) < Math.abs(delta)) {
                 delta = elem - tempValue;
                 closest = elem;
-            }else if (Math.abs(elem - tempValue) == Math.abs(delta) && elem > 0){
+            } else if (Math.abs(elem - tempValue) == Math.abs(delta) && elem > 0) {
                 delta = elem - tempValue;
                 closest = elem;
             }
