@@ -3,7 +3,6 @@ package ua.edu.ucu.tempseries;
 import static org.junit.Assert.*;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 
@@ -32,7 +31,7 @@ public class TemperatureSeriesAnalysisTest {
         double min = elems.min();
         assertEquals(1.0, min, 0.0001);
     }
-    
+
     @Test
     public void TestMax() {
         double max = elems.max();
@@ -43,6 +42,14 @@ public class TemperatureSeriesAnalysisTest {
     public void TestFindTempClosestToZero() {
         double closest = elems.findTempClosestToZero();
         assertEquals(1.0, closest, 0.00001);
+    }
+    @Test
+    public void TestSummaryStatics(){
+        TempSummaryStatistics st = elems.summaryStatistics();
+        assertEquals(4.5, st.getAvgTemp(), 0.0000001);
+        assertEquals(2.2912878474779, st.getDevTemp(), 0.0000001);
+        assertEquals(1.0, st.getMinTemp(), 0.0000001);
+        assertEquals(8.0, st.getMaxTemp(), 0.0000001);
     }
 
     @Test
@@ -55,16 +62,14 @@ public class TemperatureSeriesAnalysisTest {
 
     @Test
     public void TestFindTempsLessThen() {
-        double[] less = elems.findTempsLessThen(6);
-        double[] less_res = new double[]{1.0, 2.0, 3.0, 4.0, 5.0};
-        assertArrayEquals(less_res, less, 0.000001);
+        double[] less = elems.findTempsLessThen(6.0);
+        assertArrayEquals(new double[]{1.0, 2.0, 3.0, 4.0, 5.0}, less, 0.0);
     }
 
     @Test
     public void TestFindTempsGreaterThen() {
-        double[] greater = elems.findTempsGreaterThen(7);
-        double[] greater_res = new double[]{8.0};
-        assertArrayEquals(greater_res, greater, 0.001);
+        double[] greater = elems.findTempsGreaterThen(6.0);
+        assertArrayEquals(new double[]{7.0, 8.0}, greater, 0.0);
     }
 
 
@@ -72,6 +77,6 @@ public class TemperatureSeriesAnalysisTest {
     public void TestAddTemps() {
         TemperatureSeriesAnalysis testAdd = new TemperatureSeriesAnalysis(new double[] {1, 2, 3});
         testAdd.addTemps(444444, 0.0004, 343);
-        assertEquals(6, testAdd.getSize(), 0.001);
+        assertEquals(6, testAdd.getSize(), 0.0);
     }
 }
