@@ -20,10 +20,22 @@ public class TemperatureSeriesAnalysisTest {
         assertEquals(4.5, aver, 0.0001);
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void TestAverageEmpty() {
+        TemperatureSeriesAnalysis noelems = new TemperatureSeriesAnalysis(new double[]{});
+        double aver = noelems.average();
+    }
+
     @Test
     public void TestDeviation() {
         double d = elems.deviation();
         assertEquals(2.2912878474779, d, 0.0001);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void TestDeviationEmpty() {
+        TemperatureSeriesAnalysis noelems = new TemperatureSeriesAnalysis(new double[]{});
+        double dev = noelems.deviation();
     }
 
     @Test
@@ -32,10 +44,22 @@ public class TemperatureSeriesAnalysisTest {
         assertEquals(1.0, min, 0.0001);
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void TestMinEmpty() {
+        TemperatureSeriesAnalysis noelems = new TemperatureSeriesAnalysis(new double[]{});
+        double min = noelems.min();
+    }
+
     @Test
     public void TestMax() {
         double max = elems.max();
         assertEquals(8, max, 0.0001);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void TestMaxEmpty() {
+        TemperatureSeriesAnalysis noelems = new TemperatureSeriesAnalysis(new double[]{});
+        double max = noelems.max();
     }
 
     @Test
@@ -43,6 +67,13 @@ public class TemperatureSeriesAnalysisTest {
         double closest = elems.findTempClosestToZero();
         assertEquals(1.0, closest, 0.00001);
     }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void TestClosestToZeroEmpty() {
+        TemperatureSeriesAnalysis noelems = new TemperatureSeriesAnalysis(new double[]{});
+        double closest = noelems.findTempClosestToZero();
+    }
+
     @Test
     public void TestSummaryStatics(){
         TempSummaryStatistics st = elems.summaryStatistics();
